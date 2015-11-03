@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "ropebridge:bridge_block_lower" }
+    }
+}
