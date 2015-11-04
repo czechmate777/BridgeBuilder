@@ -153,7 +153,8 @@ public class BBItem extends Item {
 		}
 		BlockPos pos = new BlockPos(x, y, z);
 		IBlockState state = blk.getDefaultState();
-		world.destroyBlock(pos, true);
-		world.setBlockState(pos, state);
+		WorldServer server = MinecraftServer.getServer().worldServers[0];
+		server.destroyBlock(pos, true);
+		server.setBlockState(pos, state);
 	}
 }
