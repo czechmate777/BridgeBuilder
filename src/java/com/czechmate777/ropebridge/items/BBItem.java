@@ -3,6 +3,7 @@ package com.czechmate777.ropebridge.items;
 import com.czechmate777.ropebridge.blocks.ModBlocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
@@ -17,6 +19,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BBItem extends Item {
 	World world;
@@ -153,6 +156,7 @@ public class BBItem extends Item {
 		}
 		BlockPos pos = new BlockPos(x, y, z);
 		IBlockState state = blk.getDefaultState();
+		
 		WorldServer server = MinecraftServer.getServer().worldServers[0];
 		server.destroyBlock(pos, true);
 		server.setBlockState(pos, state);
