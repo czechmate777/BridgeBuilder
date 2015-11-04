@@ -1,66 +1,39 @@
-[11:11:53] [main/INFO]: Logging in with username & password
-[11:11:58] [Client thread/INFO]: Setting user: czechmate777
-[11:12:02] [Client thread/INFO]: LWJGL Version: 2.9.2
-[11:12:07] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Rope Bridge Mod, FMLFileResourcePack:Example Mod
-[11:12:07] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[11:12:07] [Thread-9/INFO]: Initializing LWJGL OpenAL
-[11:12:07] [Thread-9/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[11:12:08] [Thread-9/INFO]: OpenAL initialized.
-[11:12:08] [Sound Library Loader/INFO]: Sound engine started
-[11:12:11] [Client thread/INFO]: Created: 512x512 textures-atlas
-[11:12:13] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Rope Bridge Mod, FMLFileResourcePack:Example Mod
-[11:12:13] [Client thread/INFO]: SoundSystem shutting down...
-[11:12:13] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
-[11:12:13] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[11:12:14] [Thread-11/INFO]: Initializing LWJGL OpenAL
-[11:12:14] [Thread-11/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[11:12:14] [Thread-11/INFO]: OpenAL initialized.
-[11:12:14] [Sound Library Loader/INFO]: Sound engine started
-[11:12:16] [Client thread/INFO]: Created: 512x512 textures-atlas
-[11:12:22] [Server thread/INFO]: Starting integrated minecraft server version 1.8
-[11:12:22] [Server thread/INFO]: Generating keypair
-[11:12:22] [Server thread/INFO]: Preparing start region for level 0
-[11:12:23] [Server thread/INFO]: Preparing spawn area: 49%
-[11:12:25] [Server thread/INFO]: Changing view distance to 12, from 10
-[11:12:26] [Server thread/INFO]: czechmate777[local:E:17589097] logged in with entity id 231 at (-274.1344495341556, 88.67499960559844, 347.38800633988666)
-[11:12:26] [Server thread/INFO]: czechmate777 joined the game
-[11:12:28] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 2440ms behind, skipping 48 tick(s)
-[11:13:03] [Client thread/INFO]: [CHAT] Unknown command. Try /help for a list of commands
-[11:13:08] [Server thread/INFO]: [czechmate777: Set the time to 0]
-[11:13:08] [Client thread/INFO]: [CHAT] Set the time to 0
-[11:13:51] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 2516ms behind, skipping 50 tick(s)
-[11:13:56] [Client thread/INFO]: [CHAT] [Bridge Builder]: Start of bridge set.
-[11:14:01] [Client thread/INFO]: [CHAT] [Bridge Builder]: Selection canceled. Select a bridge start position.
-[11:14:05] [Client thread/INFO]: [CHAT] [Bridge Builder]: Start of bridge set.
-[11:14:19] [Client thread/INFO]: [CHAT] [Bridge Builder]: Building Bridge!
-[11:15:17] [Server thread/INFO]: Saving and pausing game...
-[11:15:17] [Server thread/INFO]: Saving chunks for level 'Test'/Overworld
-[11:15:17] [Server thread/INFO]: Saving chunks for level 'Test'/Nether
-[11:15:17] [Server thread/INFO]: Saving chunks for level 'Test'/The End
-[11:15:17] [Server thread/INFO]: Stopping server
-[11:15:17] [Server thread/INFO]: Saving players
-[11:15:17] [Server thread/INFO]: Saving worlds
-[11:15:17] [Server thread/INFO]: Saving chunks for level 'Test'/Overworld
-[11:15:17] [Server thread/INFO]: Saving chunks for level 'Test'/Nether
-[11:15:17] [Server thread/INFO]: Saving chunks for level 'Test'/The End
-[11:15:21] [Server thread/INFO]: Starting integrated minecraft server version 1.8
-[11:15:21] [Server thread/INFO]: Generating keypair
-[11:15:21] [Server thread/INFO]: Preparing start region for level 0
-[11:15:22] [Server thread/INFO]: Changing view distance to 12, from 10
-[11:15:22] [Server thread/INFO]: czechmate777[local:E:bb09c019] logged in with entity id 6202 at (-263.4565655936722, 90.75, 478.30973112530137)
-[11:15:22] [Server thread/INFO]: czechmate777 joined the game
-[11:15:35] [Client thread/INFO]: [CHAT] [Bridge Builder]: Start of bridge set.
-[11:15:37] [Client thread/INFO]: [CHAT] [Bridge Builder]: Building Bridge!
-[11:15:39] [Server thread/INFO]: Saving and pausing game...
-[11:15:39] [Server thread/INFO]: Saving chunks for level 'Test'/Overworld
-[11:15:40] [Server thread/INFO]: Saving chunks for level 'Test'/Nether
-[11:15:40] [Server thread/INFO]: Saving chunks for level 'Test'/The End
-[11:16:20] [Server thread/INFO]: Stopping server
-[11:16:20] [Server thread/INFO]: Saving players
-[11:16:20] [Server thread/INFO]: Saving worlds
-[11:16:20] [Server thread/INFO]: Saving chunks for level 'Test'/Overworld
-[11:16:20] [Server thread/INFO]: Saving chunks for level 'Test'/Nether
-[11:16:20] [Server thread/INFO]: Saving chunks for level 'Test'/The End
-[11:16:21] [Client thread/INFO]: Stopping!
-[11:16:21] [Client thread/INFO]: SoundSystem shutting down...
-[11:16:22] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[19:11:07] [main/INFO]: Logging in with username & password
+[19:11:11] [Client thread/INFO]: Setting user: czechmate777
+[19:11:15] [Client thread/INFO]: LWJGL Version: 2.9.2
+[19:11:18] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Rope Bridge Mod, FMLFileResourcePack:Example Mod
+[19:11:19] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[19:11:19] [Thread-9/INFO]: Initializing LWJGL OpenAL
+[19:11:19] [Thread-9/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[19:11:19] [Thread-9/INFO]: OpenAL initialized.
+[19:11:20] [Sound Library Loader/INFO]: Sound engine started
+[19:11:23] [Client thread/INFO]: Created: 512x512 textures-atlas
+[19:11:24] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Rope Bridge Mod, FMLFileResourcePack:Example Mod
+[19:11:24] [Client thread/INFO]: SoundSystem shutting down...
+[19:11:24] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[19:11:24] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[19:11:24] [Thread-11/INFO]: Initializing LWJGL OpenAL
+[19:11:24] [Thread-11/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[19:11:24] [Thread-11/INFO]: OpenAL initialized.
+[19:11:25] [Sound Library Loader/INFO]: Sound engine started
+[19:11:26] [Client thread/INFO]: Created: 512x512 textures-atlas
+[19:11:30] [Server thread/INFO]: Starting integrated minecraft server version 1.8
+[19:11:30] [Server thread/INFO]: Generating keypair
+[19:11:31] [Server thread/INFO]: Preparing start region for level 0
+[19:11:33] [Server thread/INFO]: Preparing spawn area: 54%
+[19:11:33] [Server thread/INFO]: Changing view distance to 12, from 10
+[19:11:35] [Server thread/INFO]: czechmate777[local:E:f52eb52b] logged in with entity id 191 at (-323.41071361238755, 66.31362855210112, 326.78816001871894)
+[19:11:35] [Server thread/INFO]: czechmate777 joined the game
+[19:11:42] [Server thread/INFO]: Saving and pausing game...
+[19:11:42] [Server thread/INFO]: Saving chunks for level 'Test'/Overworld
+[19:11:42] [Server thread/INFO]: Saving chunks for level 'Test'/Nether
+[19:11:42] [Server thread/INFO]: Saving chunks for level 'Test'/The End
+[19:11:43] [Server thread/INFO]: Stopping server
+[19:11:43] [Server thread/INFO]: Saving players
+[19:11:43] [Server thread/INFO]: Saving worlds
+[19:11:43] [Server thread/INFO]: Saving chunks for level 'Test'/Overworld
+[19:11:43] [Server thread/INFO]: Saving chunks for level 'Test'/Nether
+[19:11:43] [Server thread/INFO]: Saving chunks for level 'Test'/The End
+[19:11:45] [Client thread/INFO]: Stopping!
+[19:11:45] [Client thread/INFO]: SoundSystem shutting down...
+[19:11:45] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

@@ -152,12 +152,8 @@ public class BBItem extends Item {
 			blk = ModBlocks.bridgeBlockLower;
 		}
 		BlockPos pos = new BlockPos(x, y, z);
-		String oldName = world.getBlockState(pos).getBlock().getLocalizedName();
-		world.setBlockToAir(pos);
-		String midName = world.getBlockState(pos).getBlock().getLocalizedName();
 		IBlockState state = blk.getDefaultState();
+		world.destroyBlock(pos, true);
 		world.setBlockState(pos, state);
-		String newName = world.getBlockState(pos).getBlock().getLocalizedName();
-		System.out.println("Old name: "+oldName+"\nMid Name: "+midName+"\nNew Name: "+newName);
 	}
 }
