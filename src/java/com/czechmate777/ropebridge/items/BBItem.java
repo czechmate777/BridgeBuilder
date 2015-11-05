@@ -18,10 +18,19 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+// TODO:
+// make it woode
+// Bridge builder damaged
+// Only allow building in air
+// Show where impact is made and complain
+// break whole bridge with the tool
+
 public class BBItem extends Item {
+	WorldServer server;
 	World world;
 	EntityPlayer player;
 	ChatStyle chatStyle = new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA);
@@ -75,6 +84,7 @@ public class BBItem extends Item {
 	}
 
 	private void bridgeHelper(int x1, int y1, int z1, int x2, int y2, int z2, String onAxis) {
+		server = MinecraftServer.getServer().worldServers[0];
 		double m;
 		double b;
 		double distance;
@@ -94,14 +104,14 @@ public class BBItem extends Item {
 			int z = z1;
 			
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/10; y--) {
-				for (int x = Math.min(x1, x2)+1; x<= Math.max(x1, x2)-1; x++) {
+				for (int x = Math.min(x1, x2); x<= Math.max(x1, x2); x++) {
 					double funcVal = m*(double)x+b-(distance/10)*(Math.sin((x-Math.min(x1, x2))*(Math.PI/distance)));
 					if ((double)y+0.5>funcVal && (double)y-0.5<=funcVal) {
 						if (funcVal>=y) {
-							setBlock(x,y,z,true);
+							setBlock(x,y,z,true,false);
 						}
 						else {
-							setBlock(x,y,z,false);
+							setBlock(x,y,z,false,false);
 						}
 					}
 					else {
@@ -123,14 +133,14 @@ public class BBItem extends Item {
 			int x = x1;
 			
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/10; y--) {
-				for (int z = Math.min(z1, z2)+1; z<= Math.max(z1, z2)-1; z++) {
+				for (int z = Math.min(z1, z2); z<= Math.max(z1, z2); z++) {
 					double funcVal = m*(double)z+b-(distance/10)*(Math.sin((z-Math.min(z1, z2))*(Math.PI/distance)));
 					if ((double)y+0.5>funcVal && (double)y-0.5<=funcVal) {
 						if (funcVal>=y) {
-							setBlock(x,y,z,true);
+							setBlock(x,y,z,true,true);
 						}
 						else {
-							setBlock(x,y,z,false);
+							setBlock(x,y,z,false,true);
 						}
 					}
 					else {
@@ -146,7 +156,7 @@ public class BBItem extends Item {
 		player.addChatMessage(new ChatComponentText("[Bridge Builder]: "+message).setChatStyle(chatStyle));
 	}
 
-	private void setBlock(int x, int y, int z, boolean upper) {
+	private void setBlock(int x, int y, int z, boolean upper, boolean rotate) {
 		Block blk;
 		if (upper) {
 			blk = ModBlocks.bridgeBlockUpper;
@@ -155,10 +165,15 @@ public class BBItem extends Item {
 			blk = ModBlocks.bridgeBlockLower;
 		}
 		BlockPos pos = new BlockPos(x, y, z);
-		IBlockState state = blk.getDefaultState();
+		IBlockState state;
+		if(rotate)
+			state = blk.getStateFromMeta(1);
+		else
+			state = blk.getStateFromMeta(0);
 		
-		WorldServer server = MinecraftServer.getServer().worldServers[0];
 		server.destroyBlock(pos, true);
 		server.setBlockState(pos, state);
+		server.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, pos.getX(), pos.getY(), pos.getZ(), 20, 0.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+		world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D, new int[0]);
 	}
 }
