@@ -3,9 +3,9 @@
 Rope-Bridge is a simple mod that assists players in constructing rope bridges.
 For now the mod features the following:
 -   Craftable "Bridge Builder" tool
--   Simiple selection system
+-   Simple selection system
 -   Building animations
--   Detection for blicks that are in the way
+-   Detection for blocks that are in the way
 -   Custom bridge slab
 
 ### How to use
@@ -21,7 +21,7 @@ You may then chose a second anchor point for the bridge by right-clicking on ano
 
 ![Bridge Being Built](https://raw.githubusercontent.com/czechmate777/BridgeBuilder/master/images/building.png "Bridge Being Built")
 
-Sometimes there is somehting in the way of the bridge you want to build. If so, the blocks will be marked with smoke particles.
+Sometimes there is something in the way of the bridge you want to build. If so, the blocks will be marked with smoke particles.
 
 ![In The Way](https://raw.githubusercontent.com/czechmate777/BridgeBuilder/master/images/in-the-way.png "In The Way")
 
