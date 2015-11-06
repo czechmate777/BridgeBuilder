@@ -1,5 +1,8 @@
 # BridgeBuilder
 ### The Rope-Bridge mod for Minecraft 1.8.x
+
+[DOWNLOAD](https://raw.githubusercontent.com/czechmate777/BridgeBuilder/master/RopeBridge-v1.0.0-mc1.8.8.jar)
+
 Rope-Bridge is a simple mod that assists players in constructing rope bridges.
 For now the mod features the following:
 -   Craftable "Bridge Builder" tool

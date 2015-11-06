@@ -166,10 +166,11 @@ public class BBItem extends Item {
 	
 	private void spawnSmoke(BlockPos pos, int times) {
 		if (times > 0) {
-			server.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, pos.getX(), pos.getY(), pos.getZ(), 100, 0.0D, 0.0D, 0.0D, 0.0D, new int[0]);
+			server.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D, new int[0]);
 			world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D, new int[0]);
 			
-		    smokeTimer.schedule(new TimerTask() { public void run() { spawnSmoke(pos, times-1); } }, 1000);
+			final BlockPos finPos = pos; final int finTimes = times-1;
+		    smokeTimer.schedule(new TimerTask() { public void run() { spawnSmoke(finPos, finTimes); } }, 1000);
 		}
 	}
 
@@ -195,7 +196,8 @@ public class BBItem extends Item {
 			server.setBlockState(pos, state);
 			spawnSmoke(pos, 1);
 			
-		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(bridge); } }, 250);
+			final LinkedList<SlabPos> finBridge = bridge;
+		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(finBridge); } }, 250);
 		}
 	}
 }
