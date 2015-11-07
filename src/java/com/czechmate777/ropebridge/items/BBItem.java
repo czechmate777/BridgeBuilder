@@ -14,6 +14,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -24,13 +26,9 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-// TODO:
-// make it woode
-// Bridge builder damaged
-// break whole bridge with the tool
 
 public class BBItem extends Item {
 	WorldServer server;
@@ -46,41 +44,66 @@ public class BBItem extends Item {
 		super();
 		this.setUnlocalizedName(unlocalizedName);
 		this.setCreativeTab(CreativeTabs.tabTools);
+		this.setMaxStackSize(1);
+		this.setMaxDamage(64);
 		smokeTimer = new Timer();
 		buildTimer = new Timer();
 	}
 	
-	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	/**
+     * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
+     */
+    public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+    	playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
+		server = MinecraftServer.getServer().worldServers[0];
+    	return itemStackIn;
+    }
+    
+    /**
+     * Called when the player finishes using this Item (E.g. finishes eating.). Not called when the player stops using
+     * the Item before the action is complete.
+     */
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn)
     {
-		if (world==null) {
-			world = worldIn;
-		}
-		if (player==null) {
-			player = playerIn;
-		}
-		if (posSet) {
-			if (pos.getX()==firstPos.getX()&&pos.getY()==firstPos.getY()&&pos.getZ()==firstPos.getZ()) {
-				tellPlayer("Selection canceled. Select a bridge start position.");
-				posSet = false;
-				firstPos = null;
+        return stack;
+    }
+    
+    /**
+     * How long it takes to use or consume an item
+     */
+    public int getMaxItemUseDuration(ItemStack stack)
+    {
+        return 72000;
+    }
+    
+    /**
+     * returns the action that specifies what animation to play when the items is being used
+     */
+    public EnumAction getItemUseAction(ItemStack stack)
+    {
+        return EnumAction.BOW;
+    }
+    
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft)
+    {
+		if (worldIn.isRemote) {
+			if (world==null) {
+				world = worldIn;
 			}
-			else {
-				newBridge(firstPos, pos);
-				posSet = false;
+			if (player==null) {
+				player = playerIn;
+			}
+			MovingObjectPosition hit = player.rayTrace(400, 1.0F);
+			server.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F);
+			if (hit.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+				server.playSoundEffect(hit.getBlockPos().getX(), hit.getBlockPos().getY(), hit.getBlockPos().getZ(), "random.bowhit", 1.0F, 1.0F);
+				BlockPos floored = new BlockPos(Math.floor(player.posX), Math.floor(player.posY)-1, Math.floor(player.posZ));
+				newBridge(floored, hit.getBlockPos());
 			}
 		}
-		else {
-			firstPos = pos;
-			posSet = true;
-			tellPlayer("Start of bridge set.");
-		}
-		return true;
     }
 
 	private void newBridge(BlockPos pos1, BlockPos pos2) {
-		server = MinecraftServer.getServer().worldServers[0];
-		
 		LinkedList<SlabPos> bridge = new LinkedList<SlabPos>();
 		boolean allClear = true;
 
@@ -120,7 +143,7 @@ public class BBItem extends Item {
 		distance = Math.abs(x2-x1);
 		distInt = Math.abs(x2-x1);
 		
-		for (int x = Math.min(x1, x2); x<= Math.max(x1, x2); x++) {
+		for (int x = Math.min(x1, x2)+1; x<= Math.max(x1, x2)-1; x++) {
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/8; y--) {
 				double funcVal = m*(double)x+b-(distance/10)*(Math.sin((x-Math.min(x1, x2))*(Math.PI/distance)));
 				if ((double)y+0.5>funcVal && (double)y-0.5<=funcVal) {
@@ -144,22 +167,22 @@ public class BBItem extends Item {
 	}
 
 	private void tellPlayer(String message) {
-		player.addChatMessage(new ChatComponentText("[Bridge Builder]: "+message).setChatStyle(chatStyle));
+		player.addChatMessage(new ChatComponentText("[Rope Bridge]: "+message).setChatStyle(chatStyle));
 	}
 
 	private boolean addSlab(LinkedList<SlabPos> list, int x, int y, int z, boolean upper, boolean rotate) {
 		boolean isClear;
 		BlockPos pos;
 		if (rotate) {
-			pos = new BlockPos(z, y, x );
+			pos = new BlockPos(z, y, x);
 		}
 		else {
-			pos = new BlockPos(x, y, z );
+			pos = new BlockPos(x, y, z);
 		}
 		isClear = world.isAirBlock(pos);
 		list.add(new SlabPos(pos, upper, rotate));
 		if (!isClear) {
-			spawnSmoke(pos, 20);
+			spawnSmoke(pos, 15);
 		}
 		return isClear;
 	}
@@ -194,7 +217,9 @@ public class BBItem extends Item {
 				state = blk.getStateFromMeta(0);
 			server.destroyBlock(pos, true);
 			server.setBlockState(pos, state);
+			
 			spawnSmoke(pos, 1);
+			server.playSoundEffect(slab.x, slab.y, slab.z, "dig.wood", 1.0F, server.rand.nextFloat() * 0.1F + 0.9F);
 			
 			final LinkedList<SlabPos> finBridge = bridge;
 		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(finBridge); } }, 250);
