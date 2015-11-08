@@ -91,7 +91,7 @@ public class BBItem extends Item {
      */
     public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.BLOCK;
+        return EnumAction.NONE;
     }
     
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft)
@@ -106,7 +106,7 @@ public class BBItem extends Item {
 				server.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F);
 				if (hit.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
 					BlockPos floored = new BlockPos(Math.floor(player.posX), Math.floor(player.posY)-1, Math.floor(player.posZ));
-					newBridge(floored, hit.getBlockPos());
+					newBridge(floored, new BlockPos(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord));
 				}
 			}
 		}
