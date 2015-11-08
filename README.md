@@ -42,7 +42,6 @@ I hope you enjoy this mod and please don't hesitate to give me ideas for how to 
 - Make the Builder take damage over time
 - Make particles larger and easier to see
 - Ignore(replace) snow
-- Let bridge be built on angles.
 
 # License
 GPL V2

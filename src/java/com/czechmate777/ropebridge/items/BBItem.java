@@ -1,6 +1,5 @@
 package com.czechmate777.ropebridge.items;
 
-import java.awt.List;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,32 +7,29 @@ import java.util.TimerTask;
 import com.czechmate777.ropebridge.blocks.ModBlocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class BBItem extends Item {
-	WorldServer server;
+	World server;
 	World world;
 	EntityPlayer player;
+	EntityPlayer playerServer;
+	boolean playerRotating;
 	Timer smokeTimer;
 	Timer buildTimer;
 	ChatStyle chatStyle = new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA);
@@ -48,14 +44,28 @@ public class BBItem extends Item {
 		this.setMaxDamage(64);
 		smokeTimer = new Timer();
 		buildTimer = new Timer();
+		playerRotating = false;
 	}
 	
 	/**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+    	if (worldIn.isRemote) {
+			world = worldIn;
+		}
+    	else {
+    		server = worldIn;
+    	}
+		if (playerIn.worldObj.isRemote) {
+			player = playerIn;
+		}
+		else {
+			playerServer = playerIn;
+		}
     	playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
-		server = MinecraftServer.getServer().worldServers[0];
+		// server = MinecraftServer.getServer().worldServers[0];
+		playerRotating = true;
     	return itemStackIn;
     }
     
@@ -81,24 +91,23 @@ public class BBItem extends Item {
      */
     public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.BOW;
+        return EnumAction.BLOCK;
     }
     
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft)
     {
+		playerRotating = false;
 		if (worldIn.isRemote) {
-			if (world==null) {
-				world = worldIn;
+			if (!player.onGround) {
+				tellPlayer("You must be standing on something to build a bridge!");
 			}
-			if (player==null) {
-				player = playerIn;
-			}
-			MovingObjectPosition hit = player.rayTrace(400, 1.0F);
-			server.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F);
-			if (hit.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-				server.playSoundEffect(hit.getBlockPos().getX(), hit.getBlockPos().getY(), hit.getBlockPos().getZ(), "random.bowhit", 1.0F, 1.0F);
-				BlockPos floored = new BlockPos(Math.floor(player.posX), Math.floor(player.posY)-1, Math.floor(player.posZ));
-				newBridge(floored, hit.getBlockPos());
+			else {
+				MovingObjectPosition hit = player.rayTrace(400, 1.0F);
+				server.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F);
+				if (hit.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+					BlockPos floored = new BlockPos(Math.floor(player.posX), Math.floor(player.posY)-1, Math.floor(player.posZ));
+					newBridge(floored, hit.getBlockPos());
+				}
 			}
 		}
     }
@@ -107,7 +116,7 @@ public class BBItem extends Item {
 		LinkedList<SlabPos> bridge = new LinkedList<SlabPos>();
 		boolean allClear = true;
 
-		int x1,y1,x2,y2,z;
+		int x1,y1,x2,y2,z,z2;
 		int Xdiff = Math.abs(pos1.getX()-pos2.getX());
 		int Zdiff = Math.abs(pos1.getZ()-pos2.getZ());
 		boolean rotate;
@@ -118,6 +127,7 @@ public class BBItem extends Item {
 			x2 = pos2.getX();
 			y2 = pos2.getY();
 			z = pos1.getZ();
+			z2 = pos2.getZ();
 		}
 		else {
 			rotate = true;
@@ -126,12 +136,16 @@ public class BBItem extends Item {
 			x2 = pos2.getZ();
 			y2 = pos2.getY();
 			z = pos1.getX();
+			z2 = pos2.getX();
+		}
+		if (Math.abs(z2-z)>3) {
+			tellPlayer("Sorry, bridge must be built in a cardinal dirrection. Please try again.");
+			return;
 		}
 		
 		double m;
 		double b;
 		double distance;
-		double height;
 		int distInt;
 		
 		m = (double)(y2-y1)/(double)(x2-x1);
@@ -142,6 +156,14 @@ public class BBItem extends Item {
 		b = (double)y1-(m*(double)x1);
 		distance = Math.abs(x2-x1);
 		distInt = Math.abs(x2-x1);
+		
+		// Check for materials in inventory
+		if (!hasMaterials(distInt) && !player.capabilities.isCreativeMode) {
+			return;
+		}
+		else {
+			takeMaterials(distInt);
+		}
 		
 		for (int x = Math.min(x1, x2)+1; x<= Math.max(x1, x2)-1; x++) {
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/8; y--) {
@@ -156,6 +178,7 @@ public class BBItem extends Item {
 				}
 			}
 		}
+		
 		
 		if (allClear) {
 			tellPlayer("Building Bridge!");
@@ -179,7 +202,7 @@ public class BBItem extends Item {
 		else {
 			pos = new BlockPos(x, y, z);
 		}
-		isClear = world.isAirBlock(pos);
+		isClear = server.isAirBlock(pos);
 		list.add(new SlabPos(pos, upper, rotate));
 		if (!isClear) {
 			spawnSmoke(pos, 15);
@@ -222,7 +245,113 @@ public class BBItem extends Item {
 			server.playSoundEffect(slab.x, slab.y, slab.z, "dig.wood", 1.0F, server.rand.nextFloat() * 0.1F + 0.9F);
 			
 			final LinkedList<SlabPos> finBridge = bridge;
-		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(finBridge); } }, 250);
+		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(finBridge); } }, 100);
 		}
+	}
+	
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (playerRotating) {
+			if (isSelected)
+				rotatePlayerTowards(getNearestYaw());
+			else
+				playerRotating = false;
+		}
+		if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
+                playerServer = (EntityPlayer)entityIn;
+        }
+	}
+	
+	private boolean hasMaterials(int dist) {
+		if (player.capabilities.isCreativeMode) {
+			return true;
+		}
+		int slabsNeeded = dist;
+		int stringNeeded = 1+Math.round(dist/2);
+		int slabsHad = 0;
+		int stringHad = 0;
+		
+		for (int i = 0; i < 36; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if (stack == null) {
+				continue;
+			}
+			String name = stack.getItem().getUnlocalizedName();
+			if (name.equals("item.string")) {
+				stringHad += stack.stackSize;
+			}
+			if (name.equals("tile.woodSlab")) {
+				slabsHad += stack.stackSize;
+			}
+		}
+		if (slabsHad>=slabsNeeded && stringHad>=stringNeeded) {
+			return true;
+		}
+		else {
+			tellPlayer("You need at least "+slabsNeeded+" slabs and "+stringNeeded+" strings to build this bridge.");
+			return false;
+		}
+	}
+	
+	private void takeMaterials(int dist) {
+		if (player.capabilities.isCreativeMode) {
+			return;
+		}
+		int slabsNeeded = dist;
+		int stringNeeded = 1+Math.round(dist/2);
+		
+		for (int i = 0; i < 36; i++) {
+			ItemStack stack = playerServer.inventory.mainInventory[i];
+			if (stack == null) {
+				continue;
+			}
+			String name = stack.getItem().getUnlocalizedName();
+			if (name.equals("item.string")) {
+				if (stack.stackSize > stringNeeded) {
+					stack.stackSize = stack.stackSize - stringNeeded;
+					// Update on server
+					
+					stringNeeded = 0;
+				}
+				else {
+					stringNeeded -= stack.stackSize;
+					playerServer.inventory.mainInventory[i] = null;
+					continue;
+				}
+			}
+			if (name.equals("tile.woodSlab")) {
+				if (stack.stackSize > slabsNeeded) {
+					stack.stackSize = stack.stackSize - slabsNeeded;
+					// Update on server
+					slabsNeeded = 0;
+				}
+				else {
+					slabsNeeded -= stack.stackSize;
+					playerServer.inventory.mainInventory[i] = null;
+					continue;
+				}
+			}
+		}
+	}
+	
+	private float getNearestYaw() {
+		float yaw = player.rotationYaw%360;
+		if (yaw < 0) yaw+= 360;
+		if (yaw < 45) return 0F;
+		if (yaw > 45 && yaw <= 135) return 90F;
+		else if (yaw > 135 && yaw <= 225) return 180F;
+		else if (yaw > 225 && yaw <= 315) return 270F;
+		else return 360F;
+	}
+	
+	private void rotatePlayerTowards(float target) {
+		float yaw = player.rotationYaw%360;
+		if (yaw < 0) yaw+= 360;
+		rotatePlayerTo(yaw+(target-yaw)/4);
+	}
+	
+ 	private void rotatePlayerTo(float yaw) {
+	        float original = player.rotationYaw;
+	        player.rotationYaw = yaw;
+	        player.prevRotationYaw += player.rotationYaw - original;
 	}
 }
