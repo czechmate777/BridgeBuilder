@@ -38,13 +38,9 @@ I hope you enjoy this mod and please don't hesitate to give me ideas for how to 
 
 ### To Do:
 - Break whole bridge when using Bridge Builder
-- Sounds
 - Make material like wood so axes can easily break slabs
 - Make the Builder take damage over time
-- Change tool to grapling hook?
-- Chnage the way points are set to standing (1) and grappling throw (2)
 - Make particles larger and easier to see
-- Remove first and last blocks, just get in the way
 - Ignore(replace) snow
 
 # License
