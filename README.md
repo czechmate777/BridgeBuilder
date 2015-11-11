@@ -1,7 +1,6 @@
 # BridgeBuilder
 ### The Rope-Bridge mod for Minecraft 1.8.x
 
-[DOWNLOAD](https://raw.githubusercontent.com/czechmate777/BridgeBuilder/master/RopeBridge-v1.0.0-mc1.8.8.jar)
 
 Rope-Bridge is a simple mod that assists players in constructing rope bridges.
 For now the mod features the following:
@@ -38,10 +37,10 @@ I hope you enjoy this mod and please don't hesitate to give me ideas for how to 
 
 ### To Do:
 - Break whole bridge when using Bridge Builder
-- Make material like wood so axes can easily break slabs
 - Make the Builder take damage over time
-- Make particles larger and easier to see
-- Ignore(replace) snow
+- particles on server
+- build from player
+- mcmodfile
 
 # License
 GPL V2
