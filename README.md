@@ -37,10 +37,10 @@ I hope you enjoy this mod and please don't hesitate to give me ideas for how to 
 
 ### To Do:
 - Break whole bridge when using Bridge Builder
-- Make the Builder take damage over time
 - particles on server
 - build from player
 - mcmodfile
+- More than one hook in inventory breaks things!
 
 # License
 GPL V2

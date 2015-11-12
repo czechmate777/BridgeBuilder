@@ -180,9 +180,6 @@ public class BBItem extends Item {
 		if (!hasMaterials(distInt-1) && !player.capabilities.isCreativeMode) {
 			return;
 		}
-		else {
-			takeMaterials(distInt-1);
-		}
 		
 		for (int x = Math.min(x1, x2)+1; x<= Math.max(x1, x2)-1; x++) {
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/8-1; y--) {
@@ -200,6 +197,10 @@ public class BBItem extends Item {
 		
 		
 		if (allClear) {
+			if (!player.capabilities.isCreativeMode) {
+				takeMaterials(distInt-1);
+				Main.snw.sendToServer(new bridgeMessage(3, 0, 0, 0, 0, 0)); // damage item
+			}
 			tellPlayer("Building Bridge!");
 			buildBridge(bridge);
 		}

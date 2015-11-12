@@ -22,8 +22,9 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
         mainThread.addScheduledTask(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Received "+message.command+" from "+ctx.getServerHandler().playerEntity.getDisplayName());
-        		WorldServer world = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
+            	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+        		WorldServer world = (WorldServer) player.worldObj;
+                System.out.println("Received "+message.command+" from "+player.getDisplayName().getUnformattedText());
                 switch (message.command) {
                 	case 0: { // Sound
                 		String name = "";
@@ -32,8 +33,7 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
                 		case 1: { name = "dig.wood";	break; }
                 		}
                 		if (message.posX==0) {	// Sound at player
-                			EntityPlayerMP pl = ctx.getServerHandler().playerEntity;
-                			world.playSoundAtEntity(pl, name, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
+                			world.playSoundAtEntity(player, name, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
                 		}
                 		else {					// Sound at coordinates
                 			world.playSoundEffect(message.posX, message.posY, message.posZ, name, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
@@ -55,11 +55,14 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
                 	}
                 	case 2: { // set inventory
                 		if (message.stackSize == 0) {
-                			ctx.getServerHandler().playerEntity.inventory.mainInventory[message.invIndex] = null;
+                			player.inventory.mainInventory[message.invIndex] = null;
                 		}
                 		else {
-                    		ctx.getServerHandler().playerEntity.inventory.mainInventory[message.invIndex].stackSize = message.stackSize;
+                    		player.inventory.mainInventory[message.invIndex].stackSize = message.stackSize;
                 		}
+                	}
+                	case 3: { // damage item
+                		player.getCurrentEquippedItem().damageItem(1, player);
                 	}
                 }
             }

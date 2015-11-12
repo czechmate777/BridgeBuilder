@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModCrafting {
 
 	public static void initCrafting() {
-		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilder), new Object[] {"###", "###", "III", '#', Items.lead, 'I', Blocks.log});
+		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilder), new Object[] {"asi", "  t", 'a', Items.arrow, 's', Items.string, 'i', Items.iron_ingot, 't', Items.stick});
 	}
 
 }
