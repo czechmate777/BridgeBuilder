@@ -1,4 +1,6 @@
-item.tutorial_item.name=Tutorial Item
 item.bridge_builder.name=Grappling Gun
 tile.bridge_block_upper.name=Upper Bridge Board
 tile.bridge_block_lower.name=Lower Bridge Board
+item.bridge_builder_hook.name=Grap Gun Hook
+item.bridge_builder_barrel.name=Grap Gun Barrel
+item.bridge_builder_handle.name=Grap Gun Handle

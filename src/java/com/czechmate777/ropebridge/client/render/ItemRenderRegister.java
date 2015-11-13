@@ -11,8 +11,10 @@ public class ItemRenderRegister {
 	public static String modid = Main.MODID;
 	
 	public static void registerItemRenderer() {
-		reg(ModItems.tutorialItem);
 		reg(ModItems.bridgeBuilder);
+		reg(ModItems.bridgeBuilderHook);
+		reg(ModItems.bridgeBuilderBarrel);
+		reg(ModItems.bridgeBuilderHandle);
 	}
 	public static void reg(Item item) {
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher()

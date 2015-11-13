@@ -10,7 +10,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModCrafting {
 
 	public static void initCrafting() {
-		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilder), new Object[] {"asi", "  t", 'a', Items.arrow, 's', Items.string, 'i', Items.iron_ingot, 't', Items.stick});
+		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilderHook), new Object[] {"i  ", "iii", "i  ", 'i', Items.iron_ingot});
+		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilderBarrel), new Object[] {"iii", "sss", "iii", 'i', Items.iron_ingot, 's', Items.string});
+		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilderHandle), new Object[] {"i f", "sg ", "iww", 'i', Items.iron_ingot, 'f', Items.flint_and_steel, 's', Items.string, 'g', Items.gunpowder, 'w', Blocks.planks});
+		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilder), new Object[] {"tbh", 't', ModItems.bridgeBuilderHook, 'b', ModItems.bridgeBuilderBarrel, 'h', ModItems.bridgeBuilderHandle});
 	}
 
 }

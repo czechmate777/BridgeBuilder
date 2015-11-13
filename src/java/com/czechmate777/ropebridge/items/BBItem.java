@@ -24,17 +24,21 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import scala.tools.cmd.Meta;
 
 public class BBItem extends Item {
 	World world;
 	EntityPlayer player;
 	boolean viewSnap;
 	float playerFov;
+	boolean fovNormal;
 	Timer smokeTimer;
 	Timer buildTimer;
 	ChatStyle chatStyle = new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA);
 	boolean posSet = false;
 	BlockPos firstPos;
+	
+	int counter;
 	
 	public BBItem(String unlocalizedName) {
 		super();
@@ -45,6 +49,8 @@ public class BBItem extends Item {
 		smokeTimer = new Timer();
 		buildTimer = new Timer();
 		viewSnap = false;
+		fovNormal = true;
+		counter = 0;
 	}
 	
 	/**
@@ -53,7 +59,6 @@ public class BBItem extends Item {
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
     	if (worldIn.isRemote) {
 			world = worldIn;
-			System.out.println("Got local world "+world.toString());
 		}
 		if (playerIn.worldObj.isRemote) {
 			player = playerIn;
@@ -64,8 +69,8 @@ public class BBItem extends Item {
     	playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
     	if (worldIn.isRemote) {
     		viewSnap = true;
+    		fovNormal = false;
     	}
-		
     	return itemStackIn;
     }
     
@@ -281,17 +286,17 @@ public class BBItem extends Item {
 	
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (worldIn.isRemote) {
-			if (viewSnap) {
-				if (isSelected) {
+			if (isSelected) {
+				if (viewSnap) {
 					rotatePlayerTowards(getNearestYaw());
 					zoomTowards(30);
 				}
 				else {
-					viewSnap = false;
+					zoomTowards(playerFov);
 				}
 			}
 			else {
-				zoomTowards(playerFov);
+				// Do nothing for now, view sticks when switching to other items
 			}
 		}
 	}
@@ -390,16 +395,21 @@ public class BBItem extends Item {
 	}
 	
  	private void rotatePlayerTo(float yaw) {
-	        float original = player.rotationYaw;
-	        player.rotationYaw = yaw;
-	        player.prevRotationYaw += player.rotationYaw - original;
+        float original = player.rotationYaw;
+        player.rotationYaw = yaw;
+        player.prevRotationYaw += player.rotationYaw - original;
 	}
 
  	private void zoomTowards(float toFov) {
- 		if (toFov != 0) {
+ 		if (toFov != 0 && !fovNormal) {
  			float currentFov = Minecraft.getMinecraft().gameSettings.fovSetting;
- 			if (currentFov!=toFov) {
+ 			if (Math.round(currentFov)!=toFov) {
  				zoomTo(currentFov+(toFov-currentFov)/4);
+ 			}
+ 			else {
+ 				if (Math.round(currentFov)==playerFov) {
+ 					fovNormal = true;
+ 				}
  			}
  		}
  	}

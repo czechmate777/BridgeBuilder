@@ -39,8 +39,7 @@ I hope you enjoy this mod and please don't hesitate to give me ideas for how to 
 - Break whole bridge when using Bridge Builder
 - particles on server
 - build from player
-- mcmodfile
-- More than one hook in inventory breaks things!
+- Different colors
 
 # License
 GPL V2

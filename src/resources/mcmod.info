@@ -1,0 +1,21 @@
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "ropebridge",
+    "name": "Rope Bridge",
+    "description": "A mod that adds rope bridges to Minecraft. Craft the grappling gun and shoot it over a gap large or small to build a rope bridge across it.",
+    "version": "1.0.0",
+    "mcversion": "1.8",
+    "url": "http://github.com/czechmate777/BridgeBuilder",
+    "updateUrl": "",
+    "authorList": [ "czechmate777" ],
+    "credits": "Created by czechmate777",
+    "logoFile": "/ropebridge.logo.png",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": [ "Forge" ],
+    "dependencies": [],
+    "dependants": [],
+    "useDependencyInformation": false
+  }]
+}
