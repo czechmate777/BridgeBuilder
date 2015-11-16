@@ -1,5 +1,10 @@
 package com.czechmate777.ropebridge;
 
+import com.czechmate777.ropebridge.blocks.ModBlocks;
+import com.czechmate777.ropebridge.items.ModItems;
+
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -18,6 +23,7 @@ public class Main {
     public static final String MODNAME = "Rope Bridge Mod";
     public static final String VERSION = "1.0.0";
     public static SimpleNetworkWrapper snw;
+    public static Achievement craftAchievement, buildAchievement;
 
     @SidedProxy(clientSide="com.czechmate777.ropebridge.ClientProxy", serverSide="com.czechmate777.ropebridge.ServerProxy")
     public static CommonProxy proxy;
@@ -29,6 +35,11 @@ public class Main {
     public void preInit(FMLPreInitializationEvent e) {
     	// read your config file, create Blocks, Items, register with GameRegistry
     	this.proxy.preInit(e);
+    	// Register Achievements
+    	craftAchievement = new Achievement("achievement.grapplingGun", "grapplingGun", 8, 2, ModItems.bridgeBuilder, AchievementList.buildBetterPickaxe);
+    	craftAchievement.registerStat();
+    	buildAchievement = new Achievement("achievement.buildBridge", "buildBridge", 10, 2, ModBlocks.bridgeBlock2, craftAchievement);
+    	buildAchievement.registerStat();
     	// Register Simple Channel
     	snw = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
     	snw.registerMessage(bridgeMessageHandler.class, bridgeMessage.class, 0, Side.SERVER);

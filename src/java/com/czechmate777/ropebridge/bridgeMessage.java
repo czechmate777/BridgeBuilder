@@ -1,18 +1,8 @@
 package com.czechmate777.ropebridge;
 
-import com.czechmate777.ropebridge.blocks.ModBlocks;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class bridgeMessage implements IMessage{
 	int command; 	// 0 = smoke, 1 = setState, 2 = inventory change

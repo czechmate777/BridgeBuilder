@@ -6,10 +6,6 @@ import java.util.TimerTask;
 
 import com.czechmate777.ropebridge.Main;
 import com.czechmate777.ropebridge.bridgeMessage;
-import com.czechmate777.ropebridge.blocks.ModBlocks;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -24,7 +20,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import scala.tools.cmd.Meta;
 
 public class BBItem extends Item {
 	World world;
@@ -51,6 +46,10 @@ public class BBItem extends Item {
 		viewSnap = false;
 		fovNormal = true;
 		counter = 0;
+	}
+	
+	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+		playerIn.triggerAchievement(Main.craftAchievement);
 	}
 	
 	/**
@@ -218,6 +217,7 @@ public class BBItem extends Item {
 				takeMaterials(distInt-1);
 				Main.snw.sendToServer(new bridgeMessage(3, 0, 0, 0, 0, 0)); // damage item
 			}
+			Main.snw.sendToServer(new bridgeMessage(4, 0, 0, 0, 0, 0)); // trigger building achievement
 			tellPlayer("Building Bridge!");
 			buildBridge(bridge);
 		}
@@ -256,9 +256,6 @@ public class BBItem extends Item {
 	}
 
 	private void buildBridge(LinkedList<SlabPos> bridge) {
-		Block blk;
-		BlockPos pos;
-		IBlockState state;
 		SlabPos slab;
 		if(!bridge.isEmpty()) {
 			slab = bridge.pop();

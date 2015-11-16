@@ -66,6 +66,9 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
                 	case 3: { // damage item
                 		player.getCurrentEquippedItem().damageItem(1, player);
                 	}
+                	case 4: { // trigger the achievement for building a bridge
+                		player.triggerAchievement(Main.buildAchievement);
+                	}
                 }
             }
         });

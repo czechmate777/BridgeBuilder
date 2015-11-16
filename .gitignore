@@ -21,3 +21,16 @@ usernamecache.json
 
 # Allow latest builds
 !RopeBridge*.jar
+
+# Server stuff
+/world
+eula.txt
+banned-ips.json
+banned-players.json
+ops.json
+options.txt
+options.txt
+server.properties
+servers.dat
+usercache.json
+whitelist.json
