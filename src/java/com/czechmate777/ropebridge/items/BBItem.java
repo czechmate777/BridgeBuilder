@@ -204,7 +204,7 @@ public class BBItem extends Item {
 							level = 2;
 						}
 						else {
-							level = 4;
+							level = 1;
 						}
 					}
 					allClear = !addSlab(bridge,x,y+1,z,level,rotate) ? false : allClear;

@@ -6,7 +6,7 @@
         "particle": "ropebridge:blocks/bridge_block"
     },
     "elements": [
-        {   "from": [ 1, 13, 1 ],
+        {   "from": [ 1, 12, 1 ],
             "to": [ 5, 16, 15 ],
             "faces": {
                 "down":  { "uv": [ 0, 0, 4, 16 ], "texture": "#bottom" },
@@ -17,7 +17,7 @@
                 "east":  { "uv": [ 0, 0, 4, 16 ], "texture": "#side" }
             }
         },
-		{   "from": [ 6, 13, 1 ],
+		{   "from": [ 6, 12, 1 ],
             "to": [ 10, 16, 15 ],
             "faces": {
                 "down":  { "uv": [ 0, 0, 4, 16 ], "texture": "#bottom" },
@@ -28,7 +28,7 @@
                 "east":  { "uv": [ 0, 0, 4, 16 ], "texture": "#side" }
             }
         },
-		{   "from": [ 11, 13, 1 ],
+		{   "from": [ 11, 12, 1 ],
             "to": [ 15, 16, 15 ],
             "faces": {
                 "down":  { "uv": [ 0, 0, 4, 16 ], "texture": "#bottom" },
@@ -39,8 +39,8 @@
                 "east":  { "uv": [ 0, 0, 4, 16 ], "texture": "#side" }
             }
         },
-        {   "from": [ 0, 12, 4 ],
-            "to": [ 16, 13, 5 ],
+        {   "from": [ 0, 11, 4 ],
+            "to": [ 16, 12, 5 ],
             "faces": {
                 "down":  { "uv": [ 4, 1, 16, 4 ], "texture": "#bottom" },
                 "up":    { "uv": [ 4, 1, 16, 4 ], "texture": "#top" },
@@ -50,8 +50,8 @@
                 "east":  { "uv": [ 4, 1, 16, 4 ], "texture": "#side" }
             }
         },
-        {   "from": [ 0, 12, 11 ],
-            "to": [ 16, 13, 12 ],
+        {   "from": [ 0, 11, 11 ],
+            "to": [ 16, 12, 12 ],
             "faces": {
                 "down":  { "uv": [ 4, 1, 16, 4 ], "texture": "#bottom" },
                 "up":    { "uv": [ 4, 1, 16, 4 ], "texture": "#top" },
