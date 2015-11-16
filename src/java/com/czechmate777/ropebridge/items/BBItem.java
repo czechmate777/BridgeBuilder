@@ -190,12 +190,24 @@ public class BBItem extends Item {
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/8-1; y--) {
 				double funcVal = m*(double)x+b-(distance/10)*(Math.sin((x-Math.min(x1, x2))*(Math.PI/distance)));
 				if ((double)y+0.5>funcVal && (double)y-0.5<=funcVal) {
+					int level;
 					if (funcVal>=y) {
-						allClear = !addSlab(bridge,x,y+1,z,true,rotate) ? false : allClear;
+						if (funcVal>=(double)y+0.25) {
+							level = 4;
+						}
+						else {
+							level = 3;
+						}
 					}
 					else {
-						allClear = !addSlab(bridge,x,y+1,z,false,rotate) ? false : allClear;
+						if (funcVal>=(double)y-0.25) {
+							level = 2;
+						}
+						else {
+							level = 4;
+						}
 					}
+					allClear = !addSlab(bridge,x,y+1,z,level,rotate) ? false : allClear;
 				}
 			}
 		}
@@ -218,7 +230,7 @@ public class BBItem extends Item {
 		player.addChatMessage(new ChatComponentText("[Rope Bridge]: "+message).setChatStyle(chatStyle));
 	}
 
-	private boolean addSlab(LinkedList<SlabPos> list, int x, int y, int z, boolean upper, boolean rotate) {
+	private boolean addSlab(LinkedList<SlabPos> list, int x, int y, int z, int level, boolean rotate) {
 		boolean isClear;
 		BlockPos pos;
 		if (rotate) {
@@ -228,7 +240,7 @@ public class BBItem extends Item {
 			pos = new BlockPos(x, y, z);
 		}
 		isClear = world.isAirBlock(pos);
-		list.add(new SlabPos(pos, upper, rotate));
+		list.add(new SlabPos(pos, level, rotate));
 		if (!isClear) {
 			spawnSmoke(pos, 15);
 		}
@@ -250,32 +262,10 @@ public class BBItem extends Item {
 		SlabPos slab;
 		if(!bridge.isEmpty()) {
 			slab = bridge.pop();
-			int ul;
-			int rot;
-			if (slab.upper) {
-				blk = ModBlocks.bridgeBlockUpper;
-				ul = 1;
-			}
-			else {
-				blk = ModBlocks.bridgeBlockLower;
-				ul = 0;
-			}
-			pos = new BlockPos(slab.x, slab.y, slab.z);
-			if(slab.rotate) {
-				state = blk.getStateFromMeta(1);
-				rot = 1;
-			}
-			else {
-				state = blk.getStateFromMeta(0);
-				rot = 0;
-			}
-			//world.destroyBlock(pos, true);
-			//world.setBlockState(pos, state);
-			// Server call
-			Main.snw.sendToServer(new bridgeMessage(1, slab.x, slab.y, slab.z, ul, rot));
+			// Server call							build  x       y       z
+			Main.snw.sendToServer(new bridgeMessage(1, slab.x, slab.y, slab.z, slab.level, slab.rotate?1:0));
 			
-			spawnSmoke(pos, 1);
-			//world.playSoundEffect(slab.x, slab.y, slab.z, "dig.wood", 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
+			spawnSmoke(new BlockPos(slab.x, slab.y, slab.z), 1);
 			//		play sound at 						x		y		z		wood
 			Main.snw.sendToServer(new bridgeMessage(0, 	slab.x, slab.y, slab.z, 1, 0));
 			

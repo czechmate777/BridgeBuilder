@@ -6,21 +6,21 @@ public class SlabPos {
 	public int x;
 	public int y;
 	public int z;
-	public boolean upper;
+	public int level;
 	public boolean rotate;
 	
-	public SlabPos(int xCoordinate, int yCoordinate, int zCoordinate, boolean isUpperSlab, boolean isRotated) {
+	public SlabPos(int xCoordinate, int yCoordinate, int zCoordinate, int slabLevel, boolean isRotated) {
 		x = xCoordinate;
 		y = yCoordinate;
 		z = zCoordinate;
-		upper = isUpperSlab;
+		level = slabLevel;
 		rotate = isRotated;
 	}
-	public SlabPos(BlockPos position, boolean isUpperSlab, boolean isRotated) {
+	public SlabPos(BlockPos position, int slabLevel, boolean isRotated) {
 		x = position.getX();
 		y = position.getY();
 		z = position.getZ();
-		upper = isUpperSlab;
+		level = slabLevel;
 		rotate = isRotated;
 	}
 }

@@ -1,5 +1,5 @@
 {
-    "parent":"ropebridge:block/bridge_block_upper",
+    "parent":"ropebridge:block/bridge_block_2",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "normal": { "model": "ropebridge:bridge_block_4" },
+        "dir=north-south": { "model": "ropebridge:bridge_block_4" },
+        "dir=east-west": { "model": "ropebridge:bridge_block_4", "y": 90 }
+    }
+}

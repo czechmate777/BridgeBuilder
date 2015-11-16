@@ -4,6 +4,7 @@ import com.czechmate777.ropebridge.blocks.ModBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -44,11 +45,12 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
                 		BlockPos blockPos = new BlockPos(message.posX, message.posY, message.posZ);
                 		world.destroyBlock(blockPos, true);
                 		Block blk;
-                		if (message.invIndex == 1) {
-                			blk = ModBlocks.bridgeBlockUpper;
-                		}
-                		else {
-                			blk = ModBlocks.bridgeBlockLower;
+                		switch (message.invIndex) {
+                		case 1: { blk = ModBlocks.bridgeBlock1; break; }
+                		case 2: { blk = ModBlocks.bridgeBlock2; break; }
+                		case 3: { blk = ModBlocks.bridgeBlock3; break; }
+                		case 4: { blk = ModBlocks.bridgeBlock4; break; }
+                		default: { blk = Blocks.air; break; }
                 		}
                 		world.setBlockState(blockPos, blk.getStateFromMeta(message.stackSize));
                 		break;
