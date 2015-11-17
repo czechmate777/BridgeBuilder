@@ -33,8 +33,6 @@ public class BBItem extends Item {
 	boolean posSet = false;
 	BlockPos firstPos;
 	
-	int counter;
-	
 	public BBItem(String unlocalizedName) {
 		super();
 		this.setUnlocalizedName(unlocalizedName);
@@ -45,7 +43,6 @@ public class BBItem extends Item {
 		buildTimer = new Timer();
 		viewSnap = false;
 		fovNormal = true;
-		counter = 0;
 	}
 	
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
