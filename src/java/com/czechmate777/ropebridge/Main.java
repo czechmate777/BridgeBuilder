@@ -34,7 +34,7 @@ public class Main {
     @EventHandler
     public void preInit(FMLPreInitializationEvent e) {
     	// read your config file, create Blocks, Items, register with GameRegistry
-    	this.proxy.preInit(e);
+    	Main.proxy.preInit(e);
     	// Register Achievements
     	craftAchievement = new Achievement("achievement.grapplingGun", "grapplingGun", 8, 2, ModItems.bridgeBuilder, AchievementList.buildBetterPickaxe);
     	craftAchievement.registerStat();
@@ -48,12 +48,12 @@ public class Main {
     @EventHandler
     public void init(FMLInitializationEvent e) {
     	// build up data structures, add Crafting Recipes and register new handler
-    	this.proxy.init(e);
+    	Main.proxy.init(e);
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
     	// communicate with other mods, adjust based on this
-    	this.proxy.postInit(e);
+    	Main.proxy.postInit(e);
     }
 }
