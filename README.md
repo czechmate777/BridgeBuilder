@@ -1,6 +1,8 @@
 # Rope Bridge
 #### The Rope-Bridge mod for Minecraft 1.8.x
 
+[DOWNLOAD v1.1](http://adf.ly/1RrNto)
+
 ![Gif](images/gif.gif)
 
 Jump to:
