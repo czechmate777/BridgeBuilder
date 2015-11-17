@@ -67,6 +67,12 @@ I hope you enjoy this mod and please don't hesitate to give me ideas for how to 
 
 ---
 
+![Bushi_Seasons](images/Bushi_Seasons.png)
+Many thanks to Bushi_Seasons and FletcherGirl42 for all their help!
+![FletcherGirl42](images/FletcherGirl42.png)
+
+---
+
 ### To Do:
 - Break whole bridge when using Bridge Builder
 - particles on server

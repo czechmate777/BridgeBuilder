@@ -18,6 +18,7 @@ usernamecache.json
 /crash-reports
 /bin
 /config
+/screenshots
 
 # Allow latest builds
 !RopeBridge*.jar
