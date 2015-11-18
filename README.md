@@ -17,7 +17,7 @@ Features:
 -   Building animations
 -   Detection for blocks that are in the way
 -   Custom bridge quarter-slabs
--   Fully server-
+-   Fully server-compatible
 -   Custom Acievements!
 
 ---
