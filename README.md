@@ -1,9 +1,8 @@
-# Rope Bridge
+![Banner](images/banner.png)
+
 #### The Rope-Bridge mod for Minecraft 1.8.x
 
 [DOWNLOAD v1.1](http://adf.ly/1RrNto)
-
-![Gif](images/gif.gif)
 
 Jump to:
 
@@ -74,10 +73,12 @@ Many thanks to Bushi_Seasons and FletcherGirl42 for all their help!
 ---
 
 ### To Do:
-- Break whole bridge when using Bridge Builder
+- Break whole bridge when using Bridge Builder?
 - particles on server
 - build from player
 - Different colors
+- Model animation
+- Placable bridge walls
 
 ---
 
