@@ -6,6 +6,7 @@ import java.util.TimerTask;
 
 import com.czechmate777.ropebridge.Main;
 import com.czechmate777.ropebridge.bridgeMessage;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -236,7 +237,7 @@ public class BBItem extends Item {
 		else {
 			pos = new BlockPos(x, y, z);
 		}
-		isClear = world.isAirBlock(pos);
+		isClear = (world.isAirBlock(pos) || world.getBlockState(pos).getBlock().isReplaceable(world, pos));
 		list.add(new SlabPos(pos, level, rotate));
 		if (!isClear) {
 			spawnSmoke(pos, 15);
