@@ -18,11 +18,13 @@ Features:
 -   Custom bridge quarter-slabs
 -   Fully server-compatible
 -   Custom Acievements!
-- crafting recipe for string
+- 	crafting recipe for string
+-   Fancy models (coming to 1.7.10 soon)
 
 ---
 
 Reciently updated:
+- Ability to break whole bridge while sneaking
 - new recipe for string (from wool)
 - better bridge length handling
 - Grappling gun lasts longer
@@ -82,10 +84,14 @@ Many thanks to Bushi_Seasons and FletcherGirl42 for all their help!
 - Break whole bridge when using Bridge Builder?
 - particles on server
 - build from player
-- Different colors
+- Different colors/materials
 - Model animation
 - Placable bridge walls
+<<<<<<< HEAD
 - Auto-checker for updates
+=======
+- Models 1.7.10
+>>>>>>> origin/master
 
 ---
 
