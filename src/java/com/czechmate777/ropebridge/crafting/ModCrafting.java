@@ -14,6 +14,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilderBarrel), new Object[] {"iii", "sss", "iii", 'i', Items.iron_ingot, 's', Items.string});
 		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilderHandle), new Object[] {"i f", "sg ", "iww", 'i', Items.iron_ingot, 'f', Items.flint_and_steel, 's', Items.string, 'g', Items.gunpowder, 'w', Blocks.planks});
 		GameRegistry.addRecipe(new ItemStack(ModItems.bridgeBuilder), new Object[] {"tbh", 't', ModItems.bridgeBuilderHook, 'b', ModItems.bridgeBuilderBarrel, 'h', ModItems.bridgeBuilderHandle});
+		GameRegistry.addRecipe(new ItemStack(Items.string, 4), new Object[] {"w", 'w', Blocks.wool});
 	}
 
 }

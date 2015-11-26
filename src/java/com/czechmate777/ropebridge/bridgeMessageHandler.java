@@ -25,13 +25,14 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
             public void run() {
             	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
         		WorldServer world = (WorldServer) player.worldObj;
-                System.out.println("Received "+message.command+" from "+player.getDisplayName().getUnformattedText());
+        		System.out.println("Server got command " + message.command);
                 switch (message.command) {
                 	case 0: { // Sound
                 		String name = "";
                 		switch  (message.invIndex) {
                 		case 0: { name = "random.bow";	break; }
                 		case 1: { name = "dig.wood";	break; }
+                		case 2: { name = "ropebridge:cock";	break; }
                 		}
                 		if (message.posX==0) {	// Sound at player
                 			world.playSoundAtEntity(player, name, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
@@ -46,6 +47,7 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
                 		world.destroyBlock(blockPos, true);
                 		Block blk;
                 		switch (message.invIndex) {
+                		case 0: { blk = Blocks.air;				break; }
                 		case 1: { blk = ModBlocks.bridgeBlock1; break; }
                 		case 2: { blk = ModBlocks.bridgeBlock2; break; }
                 		case 3: { blk = ModBlocks.bridgeBlock3; break; }
@@ -62,12 +64,20 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
                 		else {
                     		player.inventory.mainInventory[message.invIndex].stackSize = message.stackSize;
                 		}
+                		break;
                 	}
                 	case 3: { // damage item
-                		player.getCurrentEquippedItem().damageItem(1, player);
+                		if (player.getCurrentEquippedItem().getItemDamage()==player.getCurrentEquippedItem().getMaxDamage()) {
+                			player.destroyCurrentEquippedItem();
+                		}
+                		else {
+                			player.getCurrentEquippedItem().damageItem(1, player);
+                		}
+                		break;
                 	}
                 	case 4: { // trigger the achievement for building a bridge
                 		player.triggerAchievement(Main.buildAchievement);
+                		break;
                 	}
                 }
             }

@@ -1,5 +1,6 @@
 package com.czechmate777.ropebridge.items;
 
+import java.util.List;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -7,9 +8,12 @@ import java.util.TimerTask;
 import com.czechmate777.ropebridge.Main;
 import com.czechmate777.ropebridge.bridgeMessage;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -21,6 +25,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BBItem extends Item {
 	World world;
@@ -30,9 +36,11 @@ public class BBItem extends Item {
 	boolean fovNormal;
 	Timer smokeTimer;
 	Timer buildTimer;
+	Timer clickTimer;
 	ChatStyle chatStyle = new ChatStyle().setColor(EnumChatFormatting.DARK_AQUA);
 	boolean posSet = false;
 	BlockPos firstPos;
+	private boolean warningSent = false;
 	
 	public BBItem(String unlocalizedName) {
 		super();
@@ -42,6 +50,7 @@ public class BBItem extends Item {
 		this.setMaxDamage(64);
 		smokeTimer = new Timer();
 		buildTimer = new Timer();
+		clickTimer = new Timer();
 		viewSnap = false;
 		fovNormal = true;
 	}
@@ -64,9 +73,12 @@ public class BBItem extends Item {
 			}
 		}
     	playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
+    	
     	if (worldIn.isRemote) {
     		viewSnap = true;
     		fovNormal = false;
+    		clickTimer = new Timer();
+    		clickTimer.schedule(new TimerTask() { public void run() { Main.snw.sendToServer(new bridgeMessage(0,0,0,0,2,0)); } }, 500);
     	}
     	return itemStackIn;
     }
@@ -86,6 +98,37 @@ public class BBItem extends Item {
     public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
+    }
+    
+    public float getDigSpeed(ItemStack itemstack, net.minecraft.block.state.IBlockState state) {
+    	if (player==null) {
+    		return 1.0F;
+    	}
+    	else {
+    		if (player.isSneaking() && isBridgeBlock(state.getBlock())) {
+    			if (!warningSent ) {
+    				tellPlayer("WARNING! Breaking whole bridge!");
+    				warningSent = true;
+    			}
+    			return 0.3F;
+    		}
+    		else {
+    			return 1.0F;
+    		}
+    	}
+    }
+    
+    /**
+     * allows items to add custom lines of information to the mouseover description
+     *  
+     * @param tooltip All lines to display in the Item's tooltip. This is a List of Strings.
+     * @param advanced Whether the setting "Advanced tooltips" is enabled
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
+    	tooltip.add("- Hold right-click to build");
+    	tooltip.add("- Sneak to break whole bridge");
     }
     
     /**
@@ -127,14 +170,18 @@ public class BBItem extends Item {
 							}
 						}
 						
-						newBridge(floored, new BlockPos(hit.hitVec.xCoord+xOffset, hit.hitVec.yCoord+yOffset, hit.hitVec.zCoord+zOffset));
+						newBridge(stack,floored, new BlockPos(hit.hitVec.xCoord+xOffset, hit.hitVec.yCoord+yOffset, hit.hitVec.zCoord+zOffset));
 					}
 				}
+			}
+			else {
+				// Cancel click noise
+				clickTimer.cancel();
 			}
 		}
     }
 
-	private void newBridge(BlockPos pos1, BlockPos pos2) {
+	private void newBridge(ItemStack stack, BlockPos pos1, BlockPos pos2) {
 		LinkedList<SlabPos> bridge = new LinkedList<SlabPos>();
 		boolean allClear = true;
 
@@ -178,6 +225,12 @@ public class BBItem extends Item {
 		distance = Math.abs(x2-x1);
 		distInt = Math.abs(x2-x1);
 		
+		// Check if bridge longer than 0
+		if (distInt < 2) {
+			// bridge too short
+			return;
+		}
+		
 		// Check for materials in inventory
 		if (!hasMaterials(distInt-1) && !player.capabilities.isCreativeMode) {
 			return;
@@ -213,7 +266,11 @@ public class BBItem extends Item {
 		if (allClear) {
 			if (!player.capabilities.isCreativeMode) {
 				takeMaterials(distInt-1);
+				if (stack.getItemDamage()==stack.getMaxDamage()) {
+					zoomTo(playerFov);
+				}
 				Main.snw.sendToServer(new bridgeMessage(3, 0, 0, 0, 0, 0)); // damage item
+				System.out.println("Telling server to damage item.");
 			}
 			Main.snw.sendToServer(new bridgeMessage(4, 0, 0, 0, 0, 0)); // trigger building achievement
 			tellPlayer("Building Bridge!");
@@ -224,8 +281,12 @@ public class BBItem extends Item {
 		}
 	}
 
+	private void tell(EntityPlayer playerIn, String message) {
+		playerIn.addChatMessage(new ChatComponentText("[Rope Bridge]: "+message).setChatStyle(chatStyle));
+	}
+	
 	private void tellPlayer(String message) {
-		player.addChatMessage(new ChatComponentText("[Rope Bridge]: "+message).setChatStyle(chatStyle));
+		tell(player, message);
 	}
 
 	private boolean addSlab(LinkedList<SlabPos> list, int x, int y, int z, int level, boolean rotate) {
@@ -271,17 +332,94 @@ public class BBItem extends Item {
 	
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (worldIn.isRemote) {
-			if (isSelected) {
-				if (viewSnap) {
-					rotatePlayerTowards(getNearestYaw());
-					zoomTowards(30);
+			if (player == null) {
+				player = (EntityPlayer) entityIn;
+			}
+			if (((EntityPlayer) entityIn).getCurrentEquippedItem()!=null) {
+				if (((EntityPlayer) entityIn).getCurrentEquippedItem().getUnlocalizedName().equals(stack.getUnlocalizedName())) {
+					if (viewSnap) {
+						if (isSelected) {
+							rotatePlayerTowards(getNearestYaw());
+							zoomTowards(30);
+						}
+					}
+					else {
+						zoomTowards(playerFov);
+					}
 				}
 				else {
 					zoomTowards(playerFov);
+					viewSnap = false;
+					clickTimer.cancel();
 				}
 			}
 			else {
-				// Do nothing for now, view sticks when switching to other items
+				zoomTowards(playerFov);
+				viewSnap = false;
+				clickTimer.cancel();
+			}
+		}
+	}
+	
+	/**
+     * Called before a block is broken.  Return true to prevent default block harvesting.
+     *
+     * Note: In SMP, this is called on both client and server sides!
+     *
+     * @param itemstack The current ItemStack
+     * @param pos Block's position in world
+     * @param player The Player that is wielding the item
+     * @return True to prevent harvesting, false to continue as normal
+     */
+    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer playerIn) {
+        if (playerIn.worldObj.isRemote) {
+        	Block blk = playerIn.worldObj.getBlockState(pos).getBlock();
+	    	if (playerIn.isSneaking() && isBridgeBlock(blk)) {
+	    		breakBridge(playerIn.worldObj, pos, blk.getMetaFromState(playerIn.worldObj.getBlockState(pos)));
+	        }
+        }
+    	return false;
+    }
+	
+	private boolean isBridgeBlock(Block blockIn) {
+		if (blockIn.getUnlocalizedName().contains("bridge_block")) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Breaks block at position posIn and recursively spreads to in-line neighbors
+	 * @param posIn the position of the block to start breaking bridge from
+	 */
+	private void breakBridge(World worldIn, BlockPos posIn, int meta) {
+		// Break block and turn into air
+		Main.snw.sendToServer(new bridgeMessage(1, posIn.getX(), posIn.getY(), posIn.getZ(), 0, 0));
+		int xRange = 0;
+		int zRange = 0;
+		if (meta == 0)
+			xRange = 1;
+		else
+			zRange = 1;
+		for (int x = posIn.getX()-xRange; x <= posIn.getX()+xRange; x++) {
+			for (int y = posIn.getY()-1; y <= posIn.getY()+1; y++) {
+				for (int z = posIn.getZ()-zRange; z <= posIn.getZ()+zRange; z++) {
+					if (x-posIn.getX()==0 && z-posIn.getZ()==0) {
+						// No bridge 
+					}
+					else {
+						BlockPos currentPos = new BlockPos(x, y, z);
+						IBlockState currentBlockState = worldIn.getBlockState(currentPos);
+						if (isBridgeBlock(currentBlockState.getBlock())) {
+							if (currentBlockState.getBlock().getMetaFromState(currentBlockState)==meta) {
+								World worldInFinal = worldIn; BlockPos currentPosFinal = currentPos;int metaFinal = meta;
+								buildTimer.schedule(new TimerTask() { public void run() { breakBridge(worldInFinal, currentPosFinal, metaFinal); } }, 100);
+							}
+						}
+					}
+				}
 			}
 		}
 	}

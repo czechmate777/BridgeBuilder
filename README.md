@@ -18,8 +18,14 @@ Features:
 -   Custom bridge quarter-slabs
 -   Fully server-compatible
 -   Custom Acievements!
+- crafting recipe for string
 
 ---
+
+Reciently updated:
+- new recipe for string (from wool)
+- better bridge length handling
+- Grappling gun lasts longer
 
 ### <a name="Crafting"></a>Crafting
 
@@ -79,6 +85,7 @@ Many thanks to Bushi_Seasons and FletcherGirl42 for all their help!
 - Different colors
 - Model animation
 - Placable bridge walls
+- Auto-checker for updates
 
 ---
 
