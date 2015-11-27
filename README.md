@@ -81,17 +81,13 @@ Many thanks to Bushi_Seasons and FletcherGirl42 for all their help!
 ---
 
 ### To Do:
-- Break whole bridge when using Bridge Builder?
 - particles on server
 - build from player
 - Different colors/materials
 - Model animation
 - Placable bridge walls
-<<<<<<< HEAD
 - Auto-checker for updates
-=======
 - Models 1.7.10
->>>>>>> origin/master
 
 ---
 
