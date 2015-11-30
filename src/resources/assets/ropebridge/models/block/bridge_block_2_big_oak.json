@@ -1,0 +1,6 @@
+{
+	"parent": "ropebridge:block/bridge_block_2",
+	"textures": {
+		"log": "blocks/log_big_oak_top"
+	}
+}

@@ -1,0 +1,6 @@
+{
+	"parent": "ropebridge:block/bridge_block_1",
+	"textures": {
+		"log": "blocks/log_spruce_top"
+	}
+}

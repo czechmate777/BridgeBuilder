@@ -264,21 +264,35 @@ public class BBItem extends Item {
 		
 		
 		if (allClear) {
+			int type = getWoodType();
 			if (!player.capabilities.isCreativeMode) {
 				takeMaterials(distInt-1);
 				if (stack.getItemDamage()==stack.getMaxDamage()) {
 					zoomTo(playerFov);
 				}
 				Main.snw.sendToServer(new bridgeMessage(3, 0, 0, 0, 0, 0)); // damage item
-				System.out.println("Telling server to damage item.");
 			}
 			Main.snw.sendToServer(new bridgeMessage(4, 0, 0, 0, 0, 0)); // trigger building achievement
 			tellPlayer("Building Bridge!");
-			buildBridge(bridge);
+			buildBridge(bridge, type);
 		}
 		else {
 			tellPlayer("Oops! Looks like there's something in the way. Look for the Smoke to see where that is and try again.");
 		}
+	}
+
+	private int getWoodType() {
+		for (int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if (stack == null) {
+				continue;
+			}
+			String name = stack.getItem().getUnlocalizedName();
+			if (name.equals("tile.woodSlab")) {
+				return stack.getItemDamage();
+			}
+		}
+		return 0;
 	}
 
 	private void tell(EntityPlayer playerIn, String message) {
@@ -314,19 +328,19 @@ public class BBItem extends Item {
 		}
 	}
 
-	private void buildBridge(LinkedList<SlabPos> bridge) {
+	private void buildBridge(LinkedList<SlabPos> bridge, int type) {
 		SlabPos slab;
 		if(!bridge.isEmpty()) {
 			slab = bridge.pop();
 			// Server call							build  x       y       z
-			Main.snw.sendToServer(new bridgeMessage(1, slab.x, slab.y, slab.z, slab.level, slab.rotate?1:0));
+			Main.snw.sendToServer(new bridgeMessage(1, slab.x, slab.y, slab.z, slab.level, (slab.rotate?1:0)+2*type));
 			
 			spawnSmoke(new BlockPos(slab.x, slab.y, slab.z), 1);
 			//		play sound at 						x		y		z		wood
 			Main.snw.sendToServer(new bridgeMessage(0, 	slab.x, slab.y, slab.z, 1, 0));
 			
-			final LinkedList<SlabPos> finBridge = bridge;
-		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(finBridge); } }, 100);
+			final LinkedList<SlabPos> finBridge = bridge; final int finType = type;
+		    buildTimer.schedule(new TimerTask() { public void run() { buildBridge(finBridge, finType); } }, 100);
 		}
 	}
 	
@@ -399,7 +413,7 @@ public class BBItem extends Item {
 		Main.snw.sendToServer(new bridgeMessage(1, posIn.getX(), posIn.getY(), posIn.getZ(), 0, 0));
 		int xRange = 0;
 		int zRange = 0;
-		if (meta == 0)
+		if (meta%2 == 0)
 			xRange = 1;
 		else
 			zRange = 1;

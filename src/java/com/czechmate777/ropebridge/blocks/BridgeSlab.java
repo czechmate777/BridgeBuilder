@@ -20,12 +20,12 @@ import net.minecraft.world.World;
 
 public class BridgeSlab extends BasicBlock {
 	protected static float slabHeight = 4.0F/16.0F;
-	public static final PropertyEnum DIR = PropertyEnum.create("dir", BridgeSlab.EnumType.class);
+	public static final PropertyEnum TYPE = PropertyEnum.create("type", BridgeSlab.EnumType.class);
 	public BridgeSlab(String unlocalizedName, float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
 		super(unlocalizedName, Material.wood, 1.0F, 5.0F);
 		this.setStepSound(soundTypeWood);
 		this.setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(DIR, EnumType.NS));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumType.OAK));
 	}
 	
 	public boolean canDropFromExplosion(Explosion explosionIn) {
@@ -42,7 +42,9 @@ public class BridgeSlab extends BasicBlock {
 	
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
-        ret.add(new ItemStack(Blocks.wooden_slab, 1));
+        int meta = getMetaFromState(state);
+        int slabMeta = (meta-meta%2)/2;
+        ret.add(new ItemStack(Blocks.wooden_slab, 1, slabMeta));
         ret.add(new ItemStack(Items.string, RANDOM.nextInt(2)));
         return ret;
     }
@@ -86,23 +88,47 @@ public class BridgeSlab extends BasicBlock {
     
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[] { DIR });
+        return new BlockState(this, new IProperty[] { TYPE });
     }
     
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(DIR, meta == 0 ? EnumType.NS : EnumType.EW);
+    	switch (meta) {
+    	case 0: { return getDefaultState().withProperty(TYPE, EnumType.OAK); }
+    	case 1: { return getDefaultState().withProperty(TYPE, EnumType.OAK_R); }
+    	case 2: { return getDefaultState().withProperty(TYPE, EnumType.SPRUCE); }
+    	case 3: { return getDefaultState().withProperty(TYPE, EnumType.SPRUCE_R); }
+    	case 4: { return getDefaultState().withProperty(TYPE, EnumType.BIRCH); }
+    	case 5: { return getDefaultState().withProperty(TYPE, EnumType.BIRCH_R); }
+    	case 6: { return getDefaultState().withProperty(TYPE, EnumType.JUNGLE); }
+    	case 7: { return getDefaultState().withProperty(TYPE, EnumType.JUNGLE_R); }
+    	case 8: { return getDefaultState().withProperty(TYPE, EnumType.ACACIA); }
+    	case 9: { return getDefaultState().withProperty(TYPE, EnumType.ACACIA_R); }
+    	case 10: { return getDefaultState().withProperty(TYPE, EnumType.BIG_OAK); }
+    	case 11: { return getDefaultState().withProperty(TYPE, EnumType.BIG_OAK_R); }
+    	default: { return getDefaultState().withProperty(TYPE, EnumType.OAK); }
+    	}
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        EnumType type = (EnumType) state.getValue(DIR);
+        EnumType type = (EnumType) state.getValue(TYPE);
         return type.getID();
     }
     
     public enum EnumType implements IStringSerializable {
-        NS(0, "north-south"),
-        EW(1, "east-west");
+        OAK(0, "oak"),
+        OAK_R(1, "oak-r"),
+        SPRUCE(2, "spruce"),
+        SPRUCE_R(3, "spruce-r"),
+        BIRCH(4, "birch"),
+        BIRCH_R(5, "birch-r"),
+        JUNGLE(6, "jungle"),
+        JUNGLE_R(7, "jungle-r"),
+        ACACIA(8, "acacia"),
+        ACACIA_R(9, "acacia-r"),
+        BIG_OAK(10, "big-oak"),
+        BIG_OAK_R(11, "big-oak-r");
 
         private int ID;
         private String name;

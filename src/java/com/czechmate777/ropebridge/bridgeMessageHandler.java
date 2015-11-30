@@ -25,7 +25,6 @@ public class bridgeMessageHandler implements IMessageHandler<bridgeMessage, IMes
             public void run() {
             	EntityPlayerMP player = ctx.getServerHandler().playerEntity;
         		WorldServer world = (WorldServer) player.worldObj;
-        		System.out.println("Server got command " + message.command);
                 switch (message.command) {
                 	case 0: { // Sound
                 		String name = "";

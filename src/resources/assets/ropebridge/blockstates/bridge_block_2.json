@@ -1,7 +1,17 @@
 {
     "variants": {
-        "normal": { "model": "ropebridge:bridge_block_2" },
-        "dir=north-south": { "model": "ropebridge:bridge_block_2" },
-        "dir=east-west": { "model": "ropebridge:bridge_block_2", "y": 90 }
+        "normal": { "model": "ropebridge:bridge_block_2_oak" },
+        "type=oak": { "model": "ropebridge:bridge_block_2_oak" },
+        "type=oak-r": { "model": "ropebridge:bridge_block_2_oak", "y": 90 },
+        "type=spruce": { "model": "ropebridge:bridge_block_2_spruce" },
+        "type=spruce-r": { "model": "ropebridge:bridge_block_2_spruce", "y": 90 },
+        "type=birch": { "model": "ropebridge:bridge_block_2_birch" },
+        "type=birch-r": { "model": "ropebridge:bridge_block_2_birch", "y": 90 },
+        "type=jungle": { "model": "ropebridge:bridge_block_2_jungle" },
+        "type=jungle-r": { "model": "ropebridge:bridge_block_2_jungle", "y": 90 },
+        "type=acacia": { "model": "ropebridge:bridge_block_2_acacia" },
+        "type=acacia-r": { "model": "ropebridge:bridge_block_2_acacia", "y": 90 },
+        "type=big-oak": { "model": "ropebridge:bridge_block_2_big_oak" },
+        "type=big-oak-r": { "model": "ropebridge:bridge_block_2_big_oak", "y": 90 }
     }
 }
