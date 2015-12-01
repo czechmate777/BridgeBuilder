@@ -428,7 +428,7 @@ public class BBItem extends Item {
 						IBlockState currentBlockState = worldIn.getBlockState(currentPos);
 						if (isBridgeBlock(currentBlockState.getBlock())) {
 							if (currentBlockState.getBlock().getMetaFromState(currentBlockState)==meta) {
-								World worldInFinal = worldIn; BlockPos currentPosFinal = currentPos;int metaFinal = meta;
+								final World worldInFinal = worldIn; final BlockPos currentPosFinal = currentPos; final int metaFinal = meta;
 								buildTimer.schedule(new TimerTask() { public void run() { breakBridge(worldInFinal, currentPosFinal, metaFinal); } }, 100);
 							}
 						}
