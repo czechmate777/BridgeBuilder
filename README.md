@@ -83,12 +83,11 @@ Many thanks to Bushi_Seasons and FletcherGirl42 for all their help!
 ### To Do:
 - particles on server
 - build from player
-- Different colors/materials
 - Model animation
 - Placable bridge walls
 - Auto-checker for updates
-- Models 1.7.10
-
+- updated to 1.8.9
+- make use of cofig file
 ---
 
 # License
