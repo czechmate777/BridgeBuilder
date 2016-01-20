@@ -148,7 +148,7 @@ public class BBItem extends Item {
 					tellPlayer("You must be standing on something to build a bridge!");
 				}
 				else {
-					MovingObjectPosition hit = player.rayTrace(400, 1.0F);
+					MovingObjectPosition hit = player.rayTrace(Main.maxBridgeDistance, 1.0F);
 					//world.playSoundEffect(player.posX,player.posY,player.posZ, "random.bow", 1.0F, 1.0F);
 					//			play sound at 					player		random.bow
 					Main.snw.sendToServer(new bridgeMessage(0, 	0, 0, 0, 	0, 0));
@@ -238,7 +238,7 @@ public class BBItem extends Item {
 		
 		for (int x = Math.min(x1, x2)+1; x<= Math.max(x1, x2)-1; x++) {
 			for (int y = Math.max(y1, y2); y>= Math.min(y1, y2)-distInt/8-1; y--) {
-				double funcVal = m*(double)x+b-(distance/10)*(Math.sin((x-Math.min(x1, x2))*(Math.PI/distance)));
+				double funcVal = m*(double)x+b-(distance/1000)*(Math.sin((x-Math.min(x1, x2))*(Math.PI/distance)))*Main.bridgeDroopFactor + Main.bridgeYOffset;
 				if ((double)y+0.5>funcVal && (double)y-0.5<=funcVal) {
 					int level;
 					if (funcVal>=y) {
